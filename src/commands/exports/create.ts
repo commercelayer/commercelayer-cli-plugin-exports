@@ -2,7 +2,6 @@
 import { clColor, clToken } from '@commercelayer/cli-core'
 import * as cliux from '@commercelayer/cli-ux'
 import type { ExportCreate, ResourceTypeLock } from '@commercelayer/sdk'
-import type { CommandError } from '@oclif/core/lib/interfaces'
 import open from 'open'
 import { computeDelay, ExportCommand, Flags, notify } from '../../base'
 
@@ -174,7 +173,7 @@ export default class ExportsCreate extends ExportCommand {
 
     } catch (error) {
       if (this.cl.isApiError(error) && (error.status === 422)) this.handleExportError(error, resDesc)
-      else this.handleError(error as CommandError)
+      else this.handleError(error)
     }
 
   }

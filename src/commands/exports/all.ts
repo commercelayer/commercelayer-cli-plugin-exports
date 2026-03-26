@@ -3,7 +3,6 @@ import { join } from 'node:path'
 import { clApi, clColor, clConfig, clUtil, type KeyValString } from '@commercelayer/cli-core'
 import * as cliux from '@commercelayer/cli-ux'
 import type { Export, ExportCreate, ListableResourceType, QueryParamsList, ResourceTypeLock } from '@commercelayer/sdk'
-import type { CommandError } from '@oclif/core/lib/interfaces'
 import open from 'open'
 import Spinnies from 'spinnies'
 import { ExportCommand, type ExportFormat, encoding, Flags, notify } from '../../base'
@@ -178,7 +177,7 @@ export default class ExportsAll extends ExportCommand {
       // Handle malformed requests before initializing the export
       await resSdk.list({ ...filter, include }).catch((err: unknown) => {
         this.error('Error initializing export process, please try again', { exit: false })
-        this.handleError(err as CommandError)
+        this.handleError(err)
       })
 
       const totRecords = await resSdk.count(filter)
@@ -213,7 +212,7 @@ export default class ExportsAll extends ExportCommand {
 
     } catch (error) {
       if (this.cl.isApiError(error) && (error.status === 422)) this.handleExportError(error, resDesc)
-      else this.handleError(error as CommandError)
+      else this.handleError(error)
     }
 
   }

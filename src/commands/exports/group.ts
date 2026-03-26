@@ -1,7 +1,6 @@
 import { clColor, clConfig, clOutput } from '@commercelayer/cli-core'
 import * as cliux from '@commercelayer/cli-ux'
 import type { Export, QueryPageSize, QueryParamsList } from '@commercelayer/sdk'
-import type { CommandError } from '@oclif/core/lib/interfaces'
 import Table, { type HorizontalAlignment } from 'cli-table3'
 import Command, { Args } from '../../base'
 
@@ -101,7 +100,7 @@ export default class ExportsGroup extends Command {
 		} catch (error) {
       if (this.cl.isApiError(error) && (error.status === 404))
         this.error(`Unable to find export group${groupId ? ` with id ${clColor.msg.error(groupId)}` : ''}`)
-			else this.handleError(error as CommandError, flags)
+			else this.handleError(error, flags)
 		}
 
 	}
