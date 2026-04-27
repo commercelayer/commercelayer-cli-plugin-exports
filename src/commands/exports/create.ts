@@ -1,32 +1,22 @@
 
-import { clColor, clToken } from '@commercelayer/cli-core'
-import * as cliux from '@commercelayer/cli-ux'
+import { ExportCommand, Flags, computeDelay, notify } from '../../base'
+import { clToken, clColor } from '@commercelayer/cli-core'
 import type { ExportCreate, ResourceTypeLock } from '@commercelayer/sdk'
 import type { CommandError } from '@oclif/core/lib/interfaces'
 import open from 'open'
-import { computeDelay, ExportCommand, Flags, notify } from '../../base'
+import * as cliux from '@commercelayer/cli-ux'
 
-
-
-const blindProgressBar = {
-  start() {},
-  stop() {},
-  // setTotal() {},
-  // increment() {},
-  update() {}
-}
 
 
 export default class ExportsCreate extends ExportCommand {
 
   static description = 'create a new export'
 
-  static aliases = ['exp:create', 'export']
+  static aliases = ['exp:create']
 
   static examples = [
     '$ commercelayer exports:create -t orders -f number -X <output-file-path>',
-    '$ cl exp:create -t customers -i customer_subscriptions -w email_end=@test.org -X <output-file-path> --csv',
-    '$ cl export -t return -f number -X desktop/returns.json'
+    '$ cl exp:create -t customers -i customer_subscriptions -w email_end=@test.org -X <output-file-path> --csv'
   ]
 
   static flags = {
@@ -149,40 +139,23 @@ export default class ExportsCreate extends ExportCommand {
 
       let exp = await this.cl.exports.create(expCreate)
 
-      this.log()
       if (!exp.records_count) {
-        this.log(clColor.italic('No records found'))
+        this.log(clColor.italic('\nNo records found\n'))
         this.exit()
       } else this.log(`Started export ${clColor.style.id(exp.id)}`)
-      this.log()
 
       let jwtData = clToken.decodeAccessToken(accessToken) as any
 
       const delay = computeDelay()
 
-      // if (!blindMode) cliux.action.start(`Exporting ${resDesc}`, this.exportStatus(exp.status?.replace(/_/g, ' ') || 'waiting'))
-      const progressBar = blindMode ? blindProgressBar : cliux.progress({
-        format: `Exporting ${resDesc} ... | ${clColor.greenBright('{bar}')} | ${clColor.yellowBright('{percentage}%')} | {value}/{total} | {duration_formatted} | {eta_formatted}`,
-        barCompleteChar: '\u2588',
-        barIncompleteChar: '\u2591',
-        hideCursor: true,
-        // autopadding: true,
-        // autopaddingChar: ' '
-      })
-
-      const recordsCount = exp.records_count
-      progressBar.start(recordsCount, 0)
-   
+      if (!blindMode) cliux.action.start(`Exporting ${resDesc}`, this.exportStatus(exp.status?.replace(/_/g, ' ') || 'waiting'))
       while (!['completed', 'interrupted'].includes(exp.status || '')) {
         jwtData = await this.checkAccessToken(jwtData, flags)
         exp = await this.cl.exports.retrieve(exp.id)
-        const current = Math.ceil((recordsCount / 100) * (exp.progress || 0))
-        // if (!blindMode) cliux.action.status = this.exportStatus(exp.status?.replace(/_/g, ' ') || 'waiting')
-        progressBar.update(current || 0)
+        cliux.action.status = this.exportStatus(exp.status?.replace(/_/g, ' ') || 'waiting')
         await cliux.wait(delay)
       }
-      // if (!blindMode) cliux.action.stop(this.exportStatus(exp.status))
-      progressBar.stop()
+      if (!blindMode) cliux.action.stop(this.exportStatus(exp.status))
 
 
       if (exp.status === 'completed') this.log(`\nExported ${clColor.yellowBright(exp.records_count || 0)} ${resDesc}`)

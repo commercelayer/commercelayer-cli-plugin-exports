@@ -1,13 +1,13 @@
+import ExportsCreate from './create'
+import { ExportCommand, notify, Flags, encoding, type ExportFormat } from '../../base'
+import { type KeyValString, clApi, clColor, clConfig, clUtil } from '@commercelayer/cli-core'
+import type { Export, ExportCreate, ListableResourceType, QueryParamsList, ResourceTypeLock } from '@commercelayer/sdk'
+import Spinnies from 'spinnies'
+import open from 'open'
 import { readFileSync, statSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
-import { clApi, clColor, clConfig, clUtil, type KeyValString } from '@commercelayer/cli-core'
-import * as cliux from '@commercelayer/cli-ux'
-import type { Export, ExportCreate, ListableResourceType, QueryParamsList, ResourceTypeLock } from '@commercelayer/sdk'
 import type { CommandError } from '@oclif/core/lib/interfaces'
-import open from 'open'
-import Spinnies from 'spinnies'
-import { ExportCommand, type ExportFormat, encoding, Flags, notify } from '../../base'
-import ExportsCreate from './create'
+import * as cliux from '@commercelayer/cli-ux'
 
 
 
@@ -46,7 +46,8 @@ const exportCompleted = (exports: Export[] | Export): boolean => {
   else return exports.status === 'completed'
 }
 
-const _countCompleted = (exports: Export[] | ExportJob): number => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const countCompleted = (exports: Export[] | ExportJob): number => {
   let completed = 0
   for (const e of (Array.isArray(exports) ? exports : exports.exports)) if (e.status === 'completed') completed++
   return completed
@@ -87,7 +88,7 @@ export default class ExportsAll extends ExportCommand {
 
   static description = 'export all the records'
 
-  static aliases = ['exp:all'/*, 'export'*/]
+  static aliases = ['exp:all', 'export']
 
   static examples = [
     '$ commercelayer exports:all -t orders -f number -X <output-file-path>',
@@ -118,7 +119,7 @@ export default class ExportsAll extends ExportCommand {
 
   public async run(): Promise<void> {
 
-    if (ExportsAll.disabled) this.error(`This command is deprecated, please use the updated version of the command ${clColor.cli.command('exports:create')} that now supports big exports`, { exit: 2 })
+    if (ExportsAll.disabled) this.error(`This command has been deprecated, please use instead the updated version of the command ${clColor.cli.command('exports:create')} that now supports big exports`, { exit: 2 })
 
     const { flags } = await this.parse(ExportsAll)
 

@@ -1,5 +1,5 @@
-import { clColor, clConfig } from '@commercelayer/cli-core'
 import { Command, Flags } from '@oclif/core'
+import { clColor, clConfig } from '@commercelayer/cli-core'
 import open from 'open'
 
 
