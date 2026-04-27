@@ -1,7 +1,6 @@
 import { clApi, clColor, clConfig, clOutput, clText, clUtil } from '@commercelayer/cli-core'
 import * as cliux from '@commercelayer/cli-ux'
 import type { Export, QueryPageSize, QueryParamsList } from '@commercelayer/sdk'
-import type { CommandError } from '@oclif/core/lib/interfaces'
 import Table, { type HorizontalAlignment } from 'cli-table3'
 import Command, { Flags } from '../../base'
 
@@ -136,7 +135,7 @@ export default class ExportsList extends Command {
 			return tableData
 
 		} catch (error) {
-			this.handleError(error as CommandError, flags)
+			this.handleError(error, flags)
 		}
 
 	}
