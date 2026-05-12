@@ -1,5 +1,4 @@
 import { clColor, clOutput, clText } from '@commercelayer/cli-core'
-import type { CommandError } from '@oclif/core/lib/interfaces'
 import Table from 'cli-table3'
 import Command, { Args } from '../../base'
 
@@ -73,7 +72,7 @@ export default class ExportsDetails extends Command {
       return exp
 
     } catch (error) {
-      this.handleError(error as CommandError, flags, id)
+      this.handleError(error, flags, id)
     }
 
   }

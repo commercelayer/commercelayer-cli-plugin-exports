@@ -7,8 +7,7 @@ import { clApi, clColor, clFilter, clOutput, clToken, clUpdate, clUtil } from '@
 import * as cliux from '@commercelayer/cli-ux'
 import type { CommerceLayerClient, Export, ResourceTypeLock } from '@commercelayer/sdk'
 import commercelayer, { CommerceLayerStatic } from '@commercelayer/sdk'
-import { Args, Command, Flags } from '@oclif/core'
-import type { CommandError } from '@oclif/core/lib/interfaces'
+import { Args, Command, Flags, type Interfaces } from '@oclif/core'
 import axios from 'axios'
 import notifier from 'node-notifier'
 
@@ -82,7 +81,7 @@ export default abstract class BaseCommand extends Command {
   }
 
 
-  async catch(error: CommandError): Promise<any> {
+  async catch(error: Interfaces.CommandError): Promise<any> {
     if (error.message?.includes('quit')) this.exit()
     else return super.catch(error)
   }
@@ -137,7 +136,7 @@ export default abstract class BaseCommand extends Command {
   }
 
 
-  protected handleError(error: CommandError, _flags?: any, id?: string): void {
+  protected handleError(error: unknown, _flags?: any, id?: string): void {
     if (CommerceLayerStatic.isApiError(error)) {
       if (error.status === 401) {
         const err = error.first()

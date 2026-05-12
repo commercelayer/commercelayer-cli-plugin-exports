@@ -1,5 +1,4 @@
 import { clColor, clOutput } from '@commercelayer/cli-core'
-import type { CommandError } from '@oclif/core/lib/interfaces'
 import Command, { Args, Flags } from '../../base'
 
 
@@ -58,7 +57,7 @@ export default class ExportsInterrupt extends Command {
       return exp
 
     } catch (error) {
-      this.handleError(error as CommandError, flags, id)
+      this.handleError(error, flags, id)
     }
 
   }

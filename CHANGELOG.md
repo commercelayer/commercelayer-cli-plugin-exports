@@ -1,3 +1,15 @@
+# [5.0.0-oclif4.1](https://github.com/commercelayer/commercelayer-cli-plugin-exports/compare/v4.0.1...v5.0.0-oclif4.1) (2026-05-12)
+
+
+### Features
+
+* update to oclif core v4 and node v22 ([39ad6f3](https://github.com/commercelayer/commercelayer-cli-plugin-exports/commit/39ad6f3b8ada9f0a18ba14874051fc2819dbda20))
+
+
+### BREAKING CHANGES
+
+* update to oclif core v4 and node v22
+
 ## [4.0.1](https://github.com/commercelayer/commercelayer-cli-plugin-exports/compare/v4.0.0...v4.0.1) (2026-05-11)
 
 
